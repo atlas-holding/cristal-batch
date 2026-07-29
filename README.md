@@ -1,6 +1,6 @@
-# ${{ values.name }}
+# cristal-batch
 
-${{ values.description }}
+cristal-batch service
 
 Déployé sur DxP -- golden path `devops/cron` (pattern `scheduled`).
 

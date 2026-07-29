@@ -2,7 +2,7 @@ import datetime
 import os
 import urllib.request
 
-SERVICE_NAME = "${{ values.name }}"
+SERVICE_NAME = "cristal-batch"
 
 
 def log(msg):
