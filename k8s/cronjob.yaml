@@ -36,11 +36,11 @@ spec:
             effect: NoSchedule
           containers:
           - name: cristal-batch
-            image: harbor.harbor.svc.cluster.local/dxp/cristal-batch:4e0fa65
+            image: harbor.harbor.svc.cluster.local/dxp/cristal-batch:63481cf
             imagePullPolicy: Always
             env:
             - name: BACKEND_URL
-              value: ""
+              value: "http://cristal-backend.cristal-backend-dev.svc.cluster.local"
             resources:
               requests:
                 cpu: 50m
