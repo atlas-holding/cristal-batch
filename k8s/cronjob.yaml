@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ${{ values.name }}
+  labels:
+    app: ${{ values.name }}
+    dxp.io/managed: "true"
+spec:
+  # Toutes les 5 minutes par defaut -- valeur de demonstration, a ajuster
+  # par le TL apres coup selon le besoin reel (aucun mecanisme de
+  # parametrage de la planification au provisioning, cf note dans le
+  # commentaire dxp-gp-template.yaml : seuls values.name/values.description
+  # sont substitues par le scaffolder, pas de parametre generique).
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      # backoffLimit: 0 -- meme convention que le Job de Run
+      # (job-one-shot), pas de retry automatique silencieux.
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app: ${{ values.name }}
+            backstage.io/kubernetes-id: ${{ values.name }}
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            role: workload
+          tolerations:
+          - key: role
+            operator: Equal
+            value: workload
+            effect: NoSchedule
+          containers:
+          - name: ${{ values.name }}
+            image: harbor.dxp/dxp/${{ values.name }}:latest
+            imagePullPolicy: Always
+            env:
+            - name: BACKEND_URL
+              value: ""
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 200m
+                memory: 128Mi
